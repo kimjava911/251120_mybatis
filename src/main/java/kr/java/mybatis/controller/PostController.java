@@ -5,10 +5,8 @@ import kr.java.mybatis.model.dto.PostWriteDTO;
 import kr.java.mybatis.service.MemberService;
 import kr.java.mybatis.service.PostService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/post")
@@ -44,5 +42,11 @@ public class PostController {
                 memberId
         ));
         return "redirect:/";
+    }
+
+    @GetMapping("/{postId}")
+    public String detail(@PathVariable("postId") Long postId, Model model) {
+        model.addAttribute("post", postService.findById(postId));
+        return "post_detail";
     }
 }

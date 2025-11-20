@@ -27,6 +27,7 @@
             <span><%= p.content() %></span>
             <span><%= p.memberId() %></span>
             <span><%= p.createdAt() %></span>
+            <a href="<%= request.getContextPath() %>/post/<%= p.postId() %>">자세히보기</a>
         </p>
     <% } %>
 </body>
