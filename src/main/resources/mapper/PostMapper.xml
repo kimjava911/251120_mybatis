@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.java.mybatis.model.mapper.PostMapper">
+    <insert id="insert" keyProperty="postId" useGeneratedKeys="true">
+        INSERT INTO POST (title, content, member_id)
+        VALUES (#{title}, #{content}, #{memberId})
+    </insert>
+    <update id="update">
+        UPDATE POST
+        SET title = #{title}, content = #{content}
+        WHERE post_id = #{postId}
+    </update>
+    <delete id="delete">
+        DELETE FROM POST
+        WHERE post_id = #{postId}
+    </delete>
+    <select id="findById" resultType="kr.java.mybatis.model.domain.Post">
+        SELECT
+            post_id, title, content, created_at, member_id
+        FROM POST
+        WHERE post_id = #{postId}
+    </select>
+    <select id="findAll" resultType="kr.java.mybatis.model.domain.Post">
+        SELECT
+        post_id, title, content, created_at, member_id
+        FROM POST
+    </select>
+</mapper>
