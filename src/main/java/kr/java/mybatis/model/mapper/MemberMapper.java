@@ -6,4 +6,5 @@ import kr.java.mybatis.model.domain.Member;
 // @MapperScan <- 이걸로 스캔함
 public interface MemberMapper {
     int insert(Member member); // 추가
+    Member findByUsername(String username); // username -> 조회
 }

@@ -1,5 +1,6 @@
 package kr.java.mybatis.controller;
 
+import kr.java.mybatis.model.dto.LoginDTO;
 import kr.java.mybatis.model.dto.SignupDTO;
 import kr.java.mybatis.service.MemberService;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,22 @@ public class MainController {
             // 바로 model로 전달
             redirectAttributes.addFlashAttribute("msg", "가입 실패");
             return "redirect:/signup";
+        }
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(@ModelAttribute LoginDTO dto,
+                         RedirectAttributes redirectAttributes) {
+        if (memberService.login(dto)) {
+            return "redirect:/";
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "로그인 실패");
+            return "redirect:/login";
         }
     }
 }

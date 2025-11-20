@@ -10,4 +10,10 @@
         INSERT INTO MEMBER (username, password)
         VALUES (#{username}, #{password})
     </insert>
+
+    <!-- Mapper에서 List면 전체를 가져오고, 개별 데이터면 맨 처음껏 -->
+    <select id="findByUsername" resultType="kr.java.mybatis.model.domain.Member">
+        SELECT * FROM MEMBER
+        WHERE username = #{username}
+    </select>
 </mapper>
