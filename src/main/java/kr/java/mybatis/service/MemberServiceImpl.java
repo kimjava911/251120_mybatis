@@ -36,4 +36,9 @@ public class MemberServiceImpl implements MemberService {
         // 입력한 비밀번호와 DB 비밀번호가 일치하는지 여부 true/false
         return m.getPassword().equals(dto.password());
     }
+
+    @Override
+    public Member findByUsername(String username) {
+        return memberMapper.findByUsername(username);
+    }
 }

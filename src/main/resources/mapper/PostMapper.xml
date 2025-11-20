@@ -18,13 +18,17 @@
     </delete>
     <select id="findById" resultType="kr.java.mybatis.model.domain.Post">
         SELECT
-            post_id, title, content, created_at, member_id
+            post_id AS postId, title, content,
+            created_at AS createdAt,
+            member_id AS memberId
         FROM POST
         WHERE post_id = #{postId}
     </select>
     <select id="findAll" resultType="kr.java.mybatis.model.domain.Post">
         SELECT
-        post_id, title, content, created_at, member_id
+            post_id AS postId, title, content,
+            created_at AS createdAt,
+            member_id AS memberId
         FROM POST
     </select>
 </mapper>

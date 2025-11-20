@@ -12,8 +12,13 @@
     </insert>
 
     <!-- Mapper에서 List면 전체를 가져오고, 개별 데이터면 맨 처음껏 -->
+    <!-- memberId != member_id -->
     <select id="findByUsername" resultType="kr.java.mybatis.model.domain.Member">
-        SELECT * FROM MEMBER
+        SELECT
+            member_id AS memberId,
+            username, password,
+            created_at AS createdAt
+        FROM MEMBER
         WHERE username = #{username}
     </select>
 </mapper>

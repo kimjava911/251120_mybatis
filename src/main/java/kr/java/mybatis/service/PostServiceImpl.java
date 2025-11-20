@@ -19,6 +19,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void write(PostWriteDTO dto) {
+        System.out.println(dto);
         Post p = new Post();
         p.setTitle(dto.title());
         p.setContent(dto.content());
