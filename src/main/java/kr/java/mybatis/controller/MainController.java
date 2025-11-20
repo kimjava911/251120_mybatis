@@ -4,7 +4,9 @@ import jakarta.servlet.http.HttpSession;
 import kr.java.mybatis.model.dto.LoginDTO;
 import kr.java.mybatis.model.dto.SignupDTO;
 import kr.java.mybatis.service.MemberService;
+import kr.java.mybatis.service.PostService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,13 +17,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/")
 public class MainController {
     private final MemberService memberService;
+    private final PostService postService;
 
-    public MainController(MemberService memberService) {
+    public MainController(MemberService memberService, PostService postService) {
         this.memberService = memberService;
+        this.postService = postService;
     }
 
     @GetMapping
-    public String index() {
+    public String index(Model model) {
+        model.addAttribute("posts", postService.findAll());
         return "index";
     }
 

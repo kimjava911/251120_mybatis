@@ -30,5 +30,6 @@
             created_at AS createdAt,
             member_id AS memberId
         FROM POST
+        ORDER BY post_id DESC
     </select>
 </mapper>
