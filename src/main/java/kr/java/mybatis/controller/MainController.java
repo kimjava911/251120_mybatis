@@ -1,5 +1,6 @@
 package kr.java.mybatis.controller;
 
+import jakarta.servlet.http.HttpSession;
 import kr.java.mybatis.model.dto.LoginDTO;
 import kr.java.mybatis.model.dto.SignupDTO;
 import kr.java.mybatis.service.MemberService;
@@ -50,12 +51,20 @@ public class MainController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute LoginDTO dto,
-                         RedirectAttributes redirectAttributes) {
+                        RedirectAttributes redirectAttributes,
+                        HttpSession session) {
         if (memberService.login(dto)) {
+            session.setAttribute("username", dto.username());
             return "redirect:/";
         } else {
             redirectAttributes.addFlashAttribute("msg", "로그인 실패");
             return "redirect:/login";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
     }
 }
