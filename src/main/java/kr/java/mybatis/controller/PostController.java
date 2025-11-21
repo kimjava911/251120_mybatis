@@ -1,12 +1,16 @@
 package kr.java.mybatis.controller;
 
 import jakarta.servlet.http.HttpSession;
+import kr.java.mybatis.model.domain.Post;
+import kr.java.mybatis.model.dto.PostDTO;
+import kr.java.mybatis.model.dto.PostUpdateDTO;
 import kr.java.mybatis.model.dto.PostWriteDTO;
 import kr.java.mybatis.service.MemberService;
 import kr.java.mybatis.service.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/post")
@@ -45,8 +49,65 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public String detail(@PathVariable("postId") Long postId, Model model) {
-        model.addAttribute("post", postService.findById(postId));
+    public String detail(@PathVariable("postId") Long postId, Model model,
+                         HttpSession session) {
+//        model.addAttribute("post", postService.findById(postId));
+        PostDTO p = postService.findById(postId);
+        String username = (String) session.getAttribute("username");
+        Long myId = memberService.findByUsername(username).getMemberId();
+        // 작성자 member id와 접속한 세션을 가지고 있는 member_id가 같은지를 구분
+        model.addAttribute("owner", p.memberId().equals(myId));
+        model.addAttribute("post", p);
         return "post_detail";
     }
+
+    @GetMapping("/{postId}/remove")
+    public String remove(@PathVariable("postId") Long postId,
+                         RedirectAttributes redirectAttributes,
+                         HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        Long myId = memberService.findByUsername(username).getMemberId();
+        Long postOwnerId = postService.findById(postId).memberId();
+        if (!postOwnerId.equals(myId)) {
+            redirectAttributes.addFlashAttribute("msg", "삭제할 권한이 없습니다");
+            return "redirect:/";
+        }
+        postService.delete(postId);
+        redirectAttributes.addFlashAttribute("msg", "정상 삭제 되었습니다");
+        return "redirect:/";
+    }
+
+    @GetMapping("/{postId}/edit")
+    public String edit(@PathVariable("postId") Long postId, Model model,
+                       RedirectAttributes redirectAttributes,
+                       HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        Long myId = memberService.findByUsername(username).getMemberId();
+        Long postOwnerId = postService.findById(postId).memberId();
+        if (!postOwnerId.equals(myId)) {
+            redirectAttributes.addFlashAttribute("msg", "수정할 권한이 없습니다");
+            return "redirect:/";
+        }
+        PostDTO p = postService.findById(postId);
+        model.addAttribute("post", p);
+        return "post_update";
+    }
+
+    @PostMapping("/{postId}/edit")
+    public String edit(@PathVariable("postId") Long postId,
+                       @ModelAttribute PostUpdateDTO dto,
+                       RedirectAttributes redirectAttributes,
+                       HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        Long myId = memberService.findByUsername(username).getMemberId();
+        Long postOwnerId = postService.findById(postId).memberId();
+        if (!postOwnerId.equals(myId)) {
+            redirectAttributes.addFlashAttribute("msg", "수정할 권한이 없습니다");
+            return "redirect:/";
+        }
+        postService.update(dto);
+        return "redirect:/post/" + postId;
+    }
+
+
 }
